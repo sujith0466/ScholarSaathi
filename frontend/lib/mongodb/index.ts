@@ -1,4 +1,26 @@
 import { MongoClient, Db } from "mongodb";
+import * as fs from "fs";
+import * as path from "path";
+
+// Auto-load .env if running standalone script or worker
+if (!process.env.MONGODB_URI) {
+  try {
+    const envPath = path.resolve(process.cwd(), ".env");
+    if (fs.existsSync(envPath)) {
+      const envContent = fs.readFileSync(envPath, "utf-8");
+      envContent.split("\n").forEach((line) => {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith("#") && trimmed.includes("=")) {
+          const [key, ...vals] = trimmed.split("=");
+          const val = vals.join("=").trim();
+          if (!process.env[key.trim()]) {
+            process.env[key.trim()] = val;
+          }
+        }
+      });
+    }
+  } catch {}
+}
 
 function isPlaceholderMongoUri(uri: string | undefined): boolean {
   return Boolean(
@@ -20,9 +42,6 @@ function getMongoUri(): string | null {
   return envUri!.replace("localhost:27017", "127.0.0.1:27017");
 }
 
-const uri = getMongoUri();
-const dbName = process.env.MONGODB_DB_NAME || "scholarsaathi";
-
 interface MongoGlobal {
   _mongoClientPromise?: Promise<MongoClient>;
 }
@@ -31,36 +50,52 @@ declare const globalThis: MongoGlobal;
 
 let clientPromise: Promise<MongoClient> | null = null;
 
-if (uri && process.env.NODE_ENV === "development") {
-  if (!globalThis._mongoClientPromise) {
-    const client = new MongoClient(uri, {
-      serverSelectionTimeoutMS: 3000,
-      connectTimeoutMS: 3000,
-    });
-    globalThis._mongoClientPromise = client.connect();
+function getOrCreateClientPromise(): Promise<MongoClient> | null {
+  if (clientPromise) {
+    return clientPromise;
   }
-  clientPromise = globalThis._mongoClientPromise;
-} else if (uri) {
-  const client = new MongoClient(uri, {
-    serverSelectionTimeoutMS: 3000,
-    connectTimeoutMS: 3000,
-  });
-  clientPromise = client.connect();
-}
 
-export async function getMongoClient(): Promise<MongoClient> {
-  if (!clientPromise) {
-    throw new Error("MONGODB_URI is required in production and must not be a placeholder.");
+  const uri = getMongoUri();
+  if (!uri) {
+    return null;
   }
+
+  if (process.env.NODE_ENV === "development") {
+    if (!globalThis._mongoClientPromise) {
+      const client = new MongoClient(uri, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 5000,
+      });
+      globalThis._mongoClientPromise = client.connect();
+    }
+    clientPromise = globalThis._mongoClientPromise;
+  } else {
+    const client = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
+    });
+    clientPromise = client.connect();
+  }
+
   return clientPromise;
 }
 
+export async function getMongoClient(): Promise<MongoClient> {
+  const promise = getOrCreateClientPromise();
+  if (!promise) {
+    throw new Error("MONGODB_URI is required and must be configured.");
+  }
+  return promise;
+}
+
 export async function getMongoDB(): Promise<Db | null> {
+  const dbName = process.env.MONGODB_DB_NAME || "scholarsaathi";
   try {
-    if (!clientPromise) {
+    const promise = getOrCreateClientPromise();
+    if (!promise) {
       throw new Error("MongoDB is not configured for this environment.");
     }
-    const client = await clientPromise;
+    const client = await promise;
     const db = client.db(dbName);
     return db;
   } catch (err) {
