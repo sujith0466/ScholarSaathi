@@ -1,136 +1,126 @@
 # ScholarSaathi Deployment Guide
 
-## Architecture
+> **Production Deployment Architecture & Verification Runbook**  
+> *Single-Application Full-Stack Next.js 14 on Vercel with MongoDB Atlas Persistence*
 
-Deploy ScholarSaathi as one Vercel-hosted Next.js application:
+---
+
+## 🌐 Live Production Deployment
+
+| Resource | URL | Status |
+| :--- | :--- | :---: |
+| 🚀 **Production Application** | [https://scholar-saathi-woad.vercel.app/](https://scholar-saathi-woad.vercel.app/) | ✅ `LIVE` |
+| 🎓 **Citizen Demo Experience** | [https://scholar-saathi-woad.vercel.app/app](https://scholar-saathi-woad.vercel.app/app) | ✅ `LIVE` |
+| 💻 **GitHub Repository** | [https://github.com/sujith0466/ScholarSaathi](https://github.com/sujith0466/ScholarSaathi) | ✅ `SYNCED` |
+
+---
+
+## 1. System Architecture
+
+ScholarSaathi is deployed as **one unified full-stack application** on Vercel:
 
 ```text
-Browser
-  -> Vercel Next.js application
-     -> Landing page (/)
-     -> Citizen demo (/app)
-     -> API route handlers
-     -> Veritas-RAG retrieval and deterministic fallback
-     -> MongoDB repository
-        -> MongoDB Atlas
-     -> OpenRouter
+User Browser (Citizen / Judge)
+    │
+    ▼
+Vercel Edge & Serverless Runtime
+    ├── Landing Page (/)
+    ├── Citizen Application (/app)
+    └── Server API Route Handlers (/api/*)
+           ├── MongoDB Atlas (`scholarsaathi` database cluster)
+           └── OpenRouter Free-Model Gateway (`openrouter/free`)
 ```
 
-There is no separate backend server.
+*There is NO separate backend service. All frontend, API routes, Veritas-RAG retrieval, and database persistence run inside the same Next.js App Router project.*
 
-## Vercel Project Settings
+---
 
-- Framework preset: Next.js
-- Install command: `npm install`
-- Build command: `npm run build`
-- Output directory: Vercel-managed Next.js output
-- Project root: repository root
+## 2. Vercel Project Settings
 
-## Environment Variables
+- **Framework Preset:** `Next.js`
+- **Root Directory:** `./` (Repository root)
+- **Install Command:** `npm install`
+- **Build Command:** `npm run build`
+- **Output Directory:** `.next` (Configured via `distDir: '../.next'` in `frontend/next.config.mjs`)
+- **Node.js Version:** `18.x` or `20.x`
 
-Configure these in Vercel. Do not expose secrets with `NEXT_PUBLIC_`.
+---
 
-### Production
+## 3. Environment Variables
+
+Configured in Vercel Project Settings (Settings ➔ Environment Variables):
+
+### Production Configuration
 
 ```env
-MONGODB_URI=<MongoDB Atlas connection string>
+# MongoDB Atlas Database URI (Server-Side Only)
+MONGODB_URI=your_mongodb_atlas_connection_string_here
 MONGODB_DB_NAME=scholarsaathi
-OPENROUTER_API_KEY=<OpenRouter server-side API key>
+
+# OpenRouter AI API Configuration (Server-Side Only)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
 OPENROUTER_MODEL=openrouter/free
-NEXT_PUBLIC_APP_URL=<production Vercel URL>
+
+# Application Public URL
+NEXT_PUBLIC_APP_URL=https://scholar-saathi-woad.vercel.app/
 ```
 
-### Preview
+> [!WARNING]
+> `MONGODB_URI` and `OPENROUTER_API_KEY` are **server-side only** and must NEVER be given a `NEXT_PUBLIC_` prefix or exposed to client components.
 
-Use a separate MongoDB Atlas database or cluster namespace if previews may mutate demo state.
+---
 
-```env
-MONGODB_URI=<MongoDB Atlas preview connection string>
-MONGODB_DB_NAME=scholarsaathi_preview
-OPENROUTER_API_KEY=<OpenRouter server-side API key>
-OPENROUTER_MODEL=openrouter/free
-NEXT_PUBLIC_APP_URL=<preview URL when known>
-```
+## 4. MongoDB Atlas Cloud Database Setup & Seeding
 
-### Development
+1. **Atlas Cluster:** Created M0/Serverless cluster with network access enabled for Vercel deployment.
+2. **Database:** `scholarsaathi`
+3. **Collections Initialized (5 Collections):**
+   - `students`
+   - `scholarshipApplications`
+   - `applicationDocuments`
+   - `applicationDefects`
+   - `statusHistory`
+4. **Strict Remote Seeding Command:**
+   ```bash
+   npm run seed:production
+   ```
+   *Strict seed mode enforces a valid non-local Atlas URI before applying schema indexes and seeding synthetic demo data.*
 
-Local development may use local MongoDB or a development Atlas database.
+---
 
-```env
-MONGODB_URI=<local MongoDB URI or development Atlas URI>
-MONGODB_DB_NAME=scholarsaathi
-OPENROUTER_API_KEY=<OpenRouter server-side API key>
-OPENROUTER_MODEL=openrouter/free
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
+## 5. OpenRouter Free-Model Integration & AI Fallback
 
-## MongoDB Atlas Setup
+- `openrouter/free` is an **OpenRouter free-model routing alias** that routes among active zero-cost models.
+- **Model Provenance:** Every response from `/api/ai/ask` includes structured `modelProvenance` metadata detailing requested model, actual model, provider, and fallback status.
+- **Deterministic Veritas-RAG Fallback:** If OpenRouter encounters high latency, rate limits, or unavailability, the deterministic synthesis engine generates grounded answers backed by official NSP knowledge chunks and citation cards without downtime.
 
-1. Create an Atlas project and cluster.
-2. Create a database user with least privilege for the `scholarsaathi` database.
-3. Add the Vercel deployment egress range or a temporary restricted access rule according to the deployment policy.
-4. Store the Atlas connection string only in Vercel environment variables and local `.env`.
-5. Run strict synthetic seed verification:
+---
 
-```bash
-npm run seed:production
-```
+## 6. Production Verification & QA Checklist
 
-Strict seed mode rejects blank, placeholder, localhost, or `127.0.0.1` MongoDB URIs.
+Tested and verified against the live production deployment:
 
-## OpenRouter And Model Provenance
+- [x] **Landing Page (`GET /`):** HTTP 200 OK — Visual motion, problem section, diff showcase, and CTA button.
+- [x] **Citizen App (`GET /app`):** HTTP 200 OK — Loads Priya Sharma (`RJ202425008912`) in `DEFECTIVE_INSTITUTE`.
+- [x] **Document Inspector:** Side-by-side diff circles missing circular Principal seal in red.
+- [x] **Resubmission API (`POST /api/applications/[id]/resubmit`):** State updates to `RE_SUBMITTED_INSTITUTE` in MongoDB Atlas; Health Score updates from 45 to 90.
+- [x] **Grounded AI (`POST /api/ai/ask`):** Answers scheme and defect questions with evidence citations.
+- [x] **Anti-Hallucination Gate:** Safely refuses unsupported payment guarantee questions.
+- [x] **Demo State Reset (`POST /api/applications/reset`):** Restores initial defect state for repeat evaluations.
+- [x] **Responsive Mobile QA:** Verified layout at 390px, 412px, 768px, and 1440px with zero horizontal clipping.
 
-`openrouter/free` is a free routing alias, not a fixed model. It must not be cited as OpenAI-model evidence.
+---
 
-The API response includes `data.modelProvenance` with requested model, actual model when metadata is present, provider, free-inference inference, OpenAI-authorship inference, and deterministic fallback status.
+## 7. Security Rules
 
-If OpenAI-model provenance is required, configure an explicit eligible OpenAI model and verify real `POST /api/ai/ask` responses. Do not silently switch to a paid model.
+- **Synthetic Data Only:** 100% simulated student records with masked Aadhaar (`XXXX-XXXX-4819`) and bank info.
+- **Zero Government Integrations:** No live connection to NSP, PFMS, or UIDAI production systems.
+- **Credential Protection:** `.env`, `.env.local`, `.mongodb_data/`, `.next/`, and `node_modules/` are strictly gitignored.
+- **Prototype Transparency:** Prominent non-government disclaimer banners displayed across all pages.
 
-## Local Verification Commands
+---
 
-```bash
-npm install
-npm run seed
-npm test
-npm run build
-```
+## 8. Rollback & Recovery Runbook
 
-## Production API Checks
-
-After deployment, verify:
-
-- `GET /api/applications/RJ202425008912`
-- `POST /api/applications/RJ202425008912/resubmit`
-- `POST /api/applications/reset`
-- `POST /api/ai/ask`
-
-Check valid, invalid, malformed, duplicate, and unsupported requests. No response should leak secrets.
-
-## Public QA Checklist
-
-Test the public URL at 390px, 412px, 768px, 1024px, and 1440px:
-
-- Open `/`
-- Click into `/app`
-- Load Priya Sharma
-- Inspect status diagnosis and document mismatch
-- Submit a corrected document
-- Refresh and confirm MongoDB-backed persistence
-- Ask a grounded AI question
-- Ask an unsupported guarantee question and confirm refusal
-- Reset the demo
-- Repeat on mobile touch and keyboard navigation
-
-## Security Rules
-
-- Synthetic demo data only.
-- No live government integrations.
-- No Aadhaar, PAN, OTP, payment, password, or real bank data.
-- No secrets in source, docs, client components, or `NEXT_PUBLIC_*`.
-- `.env`, `.env.local`, `.env.*.local`, `.mongodb_data/`, `.next/`, and `node_modules/` must remain ignored.
-
-## Rollback And Recovery
-
-- Vercel rollback: promote the previous successful deployment.
-- Atlas recovery: rerun `npm run seed:production` to restore synthetic demo state.
-- OpenRouter outage or rate limit: the deterministic Veritas-RAG fallback keeps the citizen journey functional, but OpenAI/model provenance remains unverified during fallback.
+- **Vercel Instant Rollback:** In the Vercel Dashboard, select Deployments ➔ previous deployment ➔ "Promote to Production".
+- **Atlas Database State Recovery:** Run `npm run seed:production` from your terminal or trigger `POST https://scholar-saathi-woad.vercel.app/api/applications/reset`.

@@ -5,9 +5,19 @@
 
 ---
 
+## 🌐 Live Production Links
+
+| Resource | URL |
+| :--- | :--- |
+| 🚀 **Production Landing Page** | [https://scholar-saathi-woad.vercel.app/](https://scholar-saathi-woad.vercel.app/) |
+| 🎓 **Live Citizen Demo Experience** | [https://scholar-saathi-woad.vercel.app/app](https://scholar-saathi-woad.vercel.app/app) |
+| 💻 **GitHub Repository** | [https://github.com/sujith0466/ScholarSaathi](https://github.com/sujith0466/ScholarSaathi) |
+
+---
+
 ## 1. What is ScholarSaathi?
 
-**ScholarSaathi** is an independent, citizen-facing digital service designed to demystify complex government scholarship application statuses for Indian college students. Instead of presenting cryptic acronyms and unexplained defect notices, ScholarSaathi delivers plain-language diagnostics, actionable document-correction workflows, and grounded policy guidance.
+**ScholarSaathi** is an independent, citizen-facing digital service designed to demystify complex government scholarship application statuses for Indian college students. Instead of presenting cryptic acronyms (`DEFECTIVE_INSTITUTE`) and unexplained defect hold-ups, ScholarSaathi delivers plain-language diagnostics, actionable document-correction workflows, and grounded policy guidance.
 
 > [!IMPORTANT]
 > **Independent Hackathon Prototype Disclosure:**  
@@ -28,24 +38,68 @@ Every year, thousands of eligible first-generation students in India face delaye
 
 ---
 
-## 3. Current Feature Set
+## 3. The Interactive Golden Journey (Try the Demo)
 
-- **Production Landing Page (`/`):** 11 responsive sections, signature animated *Citizen Journey Flow*, side-by-side defect diff showcase, and Veritas-RAG AI showcase.
-- **Citizen Application Experience (`/app`):** Full interactive browser-to-database golden journey for synthetic applicant **Priya Sharma (`RJ202425008912`)**.
-- **Deterministic Journey State Resolver:** Computes Diagnostic Health Score (45/100 ➔ 90/100), plain-language status explanations, reassurance messaging, and 5-stage verification timeline.
-- **Document Mismatch Inspector:** Side-by-side visual diff comparing defective uploads against verified institutional standards (highlighting missing circular college seals).
-- **Deterministic Validation & Resubmission:** Enforces valid document selection and executes atomic state transition to `RE_SUBMITTED_INSTITUTE` with 7-day college SLA.
-- **Cloud Database Persistence:** Real persistence powered by MongoDB Atlas across 5 collections (`students`, `scholarshipApplications`, `applicationDocuments`, `applicationDefects`, `statusHistory`).
-- **Veritas-RAG AI Assistant:** Grounded Q&A assistant backed by curated NSP scheme guidelines, source classification (`PUBLIC_OFFICIAL_SOURCE` vs `SYNTHETIC_PROTOTYPE_GUIDANCE`), hybrid keyword/token retrieval, sufficiency gates, and deterministic fallback synthesis.
-- **Framer Motion Visual System:** Calm, accessible ambient background with native `useReducedMotion()` support.
-- **Demo State Reset:** 1-click database reset restoring Priya Sharma to initial `DEFECTIVE_INSTITUTE` state for repeatable evaluation.
+You can experience the complete browser-to-database golden journey live at [https://scholar-saathi-woad.vercel.app/app](https://scholar-saathi-woad.vercel.app/app):
+
+```text
+Landing Page (/)
+    │  Click "Try Citizen Demo"
+    ▼
+Citizen Dashboard (/app)
+    │  Loads synthetic applicant: Priya Sharma (RJ202425008912)
+    ▼
+Initial State: DEFECTIVE_INSTITUTE (Health Score 45/100)
+    │  Plain-language diagnosis: "Your application is not rejected. One document needs correction."
+    ▼
+Inspect Defect (Document Mismatch Modal)
+    │  Side-by-side visual diff circles missing circular Principal seal in red
+    ▼
+Select Verified Replacement
+    │  Choose "Priya_Bonafide_Stamped_Verified.pdf" with circular institutional seal
+    ▼
+Submit Correction
+    │  Deterministic pre-submission guard passes; triggers POST /api/applications/[id]/resubmit
+    ▼
+MongoDB Atlas State Mutation
+    │  Application state updates atomically to RE_SUBMITTED_INSTITUTE in MongoDB
+    ▼
+Updated Dashboard (Health Score 90/100)
+    │  Timeline advances to "College Re-Verification"; Next Action updates to 7-Day INO SLA
+    ▼
+Ask Veritas-RAG AI Assistant
+    │  Ask "Why was my application marked defective?" or "How long does verification take?"
+    │  Returns grounded answer backed by official NSP manual citations & evidence cards
+    ▼
+Reset Demo
+    │  Click "Reset Demo State" in banner to re-seed MongoDB Atlas for repeat evaluations
+```
 
 ---
 
-## 4. System Architecture
+## 4. Completed Feature Inventory
+
+1. **Production Landing Page (`/`):** 11 responsive sections, signature animated *Citizen Journey Flow*, side-by-side defect diff showcase, and Veritas-RAG AI showcase.
+2. **Citizen Application Experience (`/app`):** Full interactive browser-to-database golden journey for synthetic applicant **Priya Sharma (`RJ202425008912`)**.
+3. **Deterministic Journey State Resolver:** Computes Diagnostic Health Score (45/100 ➔ 90/100), plain-language status explanations, reassurance messaging, and 5-stage verification timeline.
+4. **Document Mismatch Inspector:** Side-by-side visual diff comparing defective uploads against verified institutional standards (highlighting missing circular college seals).
+5. **Deterministic Validation & Resubmission:** Enforces valid document selection and executes atomic state transition to `RE_SUBMITTED_INSTITUTE` with 7-day college SLA.
+6. **Cloud Database Persistence:** Real persistence powered by MongoDB Atlas across 5 collections (`students`, `scholarshipApplications`, `applicationDocuments`, `applicationDefects`, `statusHistory`).
+7. **Veritas-RAG AI Assistant:** Grounded Q&A assistant backed by curated NSP scheme guidelines, source classification (`PUBLIC_OFFICIAL_SOURCE` vs `SYNTHETIC_PROTOTYPE_GUIDANCE`), hybrid keyword/token retrieval, sufficiency gates, and deterministic fallback synthesis.
+8. **Anti-Hallucination Safeguards:** Refuses to fabricate unsupported payment guarantees, false approval claims, or out-of-domain answers.
+9. **OpenRouter Free Model Routing:** Connects to available free models via `OPENROUTER_MODEL=openrouter/free` with deterministic grounded fallback.
+10. **Framer Motion Visual System:** Calm, accessible ambient background with native `useReducedMotion()` support.
+11. **Mobile-First Accessibility:** Optimized for 390px/412px viewports, keyboard Escape listener, ARIA modal dialogs, and high-contrast typography.
+12. **Demo State Reset:** 1-click database reset restoring Priya Sharma to initial `DEFECTIVE_INSTITUTE` state for repeatable evaluation.
+
+---
+
+## 5. System Architecture
+
+ScholarSaathi runs as **one unified full-stack Next.js 14 application on Vercel** with direct connection to MongoDB Atlas and OpenRouter:
 
 ```text
-Browser (Citizen / Judge)
+User Browser (Citizen / Judge)
   │
   ▼
 Vercel Edge & Serverless Runtime (Single Next.js Full-Stack App)
@@ -55,65 +109,35 @@ Vercel Edge & Serverless Runtime (Single Next.js Full-Stack App)
   │
   ├── API Route Handlers (Server-Side Only)
   │     ├── GET  /api/applications/[id]          (Fetch & Resolve Journey State)
-  │     ├── POST /api/applications/[id]/resubmit (Validate & Mutate State)
-  │     ├── POST /api/applications/reset         (Re-seed MongoDB State)
+  │     ├── POST /api/applications/[id]/resubmit (Validate & Mutate State in Atlas)
+  │     ├── POST /api/applications/reset         (Re-seed Atlas Demo State)
   │     └── POST /api/ai/ask                     (Veritas-RAG + OpenRouter AI)
   │
   ├── Persistence Layer
   │     └── MongoDB Atlas Cloud Cluster (`scholarsaathi` database)
   │
   └── AI & Grounding Layer
-        ├── Curated Knowledge Corpus (NSP SOPs & Desks)
+        ├── Curated Knowledge Corpus (Official NSP SOPs & Desks)
         ├── Hybrid Keyword + Token Density Retriever
-        └── OpenRouter Gateway (`openrouter/free`) with Grounded Synthesis Fallback
+        └── OpenRouter Free-Model Gateway with Grounded Synthesis Fallback
 ```
 
 ---
 
-## 5. Technology Stack
+## 6. Technology Stack
 
 - **Framework:** Next.js 14 (App Router), React 18, TypeScript
 - **Styling & Motion:** Tailwind CSS, Framer Motion, Lucide React
-- **Database Engine:** MongoDB Native Node.js Driver (`mongodb: ^6.7.0`), MongoDB Atlas
-- **AI / LLM Layer:** OpenAI SDK (`openai: ^4.52.0`), OpenRouter Free Tier Gateway, Veritas-RAG
+- **Database Engine:** MongoDB Native Node.js Driver (`mongodb: ^6.7.0`), MongoDB Atlas Cloud
+- **AI / LLM Layer:** OpenAI SDK (`openai: ^4.52.0`), OpenRouter Free Model Routing, Veritas-RAG
 - **Testing & Quality:** Vitest (`vitest: ^1.6.0`), TypeScript type validation
-
----
-
-## 6. Repository Folder Structure
-
-```
-ScholarSaathi/
-├── docs/                                 # Authoritative Project Documentation
-│   ├── PRD.md                            # Product Requirements Document
-│   ├── PPD.md                            # Product Problem Definition
-│   ├── PRODUCT_BLUEPRINT.md              # Technical Architecture & Spec
-│   ├── HACKATHON_MVP_TECHNICAL_SPEC.md   # Hackathon MVP Specification
-│   ├── DEPLOYMENT.md                     # Single-App Vercel + Atlas Guide
-│   └── SCHOLARSAATHI_IMPLEMENTATION_TRACKER.md # Live Milestone Tracker
-├── frontend/                             # Next.js Full-Stack Application
-│   ├── app/                              # Pages (/, /app) & API Routes (/api/*)
-│   ├── components/                       # Landing, Dashboard, AI Drawer, Modals
-│   ├── domain/                           # Deterministic Journey State Resolver
-│   ├── lib/                              # MongoDB client, Repositories, Veritas-RAG, AI
-│   ├── types/                            # Domain TypeScript Interfaces
-│   └── public/                           # Static Assets & Synthetic Documents
-├── tests/                                # Vitest Automated Test Suites (42/42 Tests)
-│   └── unit/                             # API, DB, Landing, Motion, RAG, Resolver Tests
-├── scripts/                              # Database Utilities
-│   └── seed.ts                           # Atlas Seeding Script (`npm run seed:production`)
-├── .env.example                          # Safe Environment Variable Template
-├── .gitignore                            # Exclusion Rules (.env, .mongodb_data, .next)
-├── package.json                          # NPM Scripts & Dependencies
-├── vercel.json                           # Vercel Deployment Settings
-└── README.md                             # Root Documentation
-```
+- **Hosting & CDN:** Vercel Global Edge Network
 
 ---
 
 ## 7. Environment Variables
 
-Create a local `.env` file based on `.env.example`:
+Server-side configuration required for development and production:
 
 ```env
 # MongoDB Atlas Database URI (Server-Side Only)
@@ -125,7 +149,7 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 OPENROUTER_MODEL=openrouter/free
 
 # Application URL
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=https://scholar-saathi-woad.vercel.app/
 ```
 
 > [!WARNING]
@@ -143,6 +167,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 1. **Clone & Install Dependencies:**
    ```bash
+   git clone https://github.com/sujith0466/ScholarSaathi.git
+   cd ScholarSaathi
    npm install
    ```
 
@@ -152,12 +178,12 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
    # Add your MONGODB_URI and OPENROUTER_API_KEY in .env
    ```
 
-3. **Seed Database:**
+3. **Seed Database (Local or Atlas):**
    ```bash
    npm run seed:production
    ```
 
-4. **Run Test Suite:**
+4. **Run Test Suite (42/42 Tests):**
    ```bash
    npm test
    ```
@@ -171,30 +197,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ---
 
-## 9. Production Build & Deployment
-
-### Production Build Verification
-```bash
-npm run build
-```
-
-### Deploying to Vercel (Single Application)
-ScholarSaathi deploys as a single Next.js application on Vercel:
-1. Import the repository into Vercel.
-2. Framework Preset: **Next.js** (Root directory: `.`).
-3. Add Environment Variables:
-   - `MONGODB_URI`
-   - `MONGODB_DB_NAME=scholarsaathi`
-   - `OPENROUTER_API_KEY`
-   - `OPENROUTER_MODEL=openrouter/free`
-   - `NEXT_PUBLIC_APP_URL=https://your-app.vercel.app`
-4. Deploy and execute remote seed via `npm run seed:production` from your CI/local terminal.
-
-Detailed deployment instructions are available in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
-
----
-
-## 10. What is Real vs Synthetic?
+## 9. What is Real vs Synthetic?
 
 | Layer | Real / Authoritative | Synthetic / Simulated |
 | :--- | :--- | :--- |
@@ -206,13 +209,22 @@ Detailed deployment instructions are available in [docs/DEPLOYMENT.md](./docs/DE
 
 ---
 
+## 10. Verification & Test Evidence
+
+- **Unit Test Suite:** **42/42 tests passing** across 9 Vitest suites (`npm test`).
+- **Production Build:** Compiled cleanly with zero errors (`npm run build`).
+- **Database Seeding:** Verified across 5 collections in MongoDB Atlas (`npm run seed:production`).
+- **Public URL Verification:** Both `/` and `/app` verified returning HTTP 200 on `https://scholar-saathi-woad.vercel.app/`.
+
+---
+
 ## 11. Current Project Status
 
 - **Architecture & Golden Journey:** `100% COMPLETED`
 - **MongoDB Atlas Cloud Database:** `CONNECTED & VERIFIED`
 - **Automated Test Suites:** `42/42 TESTS PASSING`
 - **Production Build:** `VERIFIED (0 Errors)`
-- **Vercel Public Deployment:** `READY FOR DEPLOYMENT`
+- **Vercel Public Deployment:** `LIVE IN PRODUCTION`
 
 ---
 

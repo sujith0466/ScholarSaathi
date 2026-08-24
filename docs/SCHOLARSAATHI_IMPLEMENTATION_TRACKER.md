@@ -7,20 +7,20 @@
 CURRENT STATE BLOCK
 ================================================================================
 CURRENT PHASE:               PHASE 5 — Production Cloud Database & Deployment Readiness
-CURRENT TASK:                Vercel .next Build Output Directory Fix & Verification
+CURRENT TASK:                Live Production Deployment Verified & Documentation Synced
 CURRENT OWNER:               Codex & Antigravity (Senior Engineering Lead)
-LAST COMPLETED:              Configured distDir in frontend/next.config.mjs to '../.next'; Verified Root .next/routes-manifest.json Generation; 42/42 Tests Passing
-NEXT TASK:                   Trigger Vercel Redeployment & Public URL Verification
-BLOCKERS:                    None (Build output path verified matching Vercel root expectations)
+LAST COMPLETED:              Vercel Production Deployment Verified Live (HTTP 200 on / and /app); MongoDB Atlas Active; All 42 Tests Passing
+NEXT TASK:                   2-Minute Demo Video Recording & Hackathon Submission Packaging
+BLOCKERS:                    None (Production deployment is live, stable, and verified)
 MVP COMPLETION:              100%
 GOLDEN JOURNEY COMPLETION:   100%
+PRODUCTION STATUS:           LIVE_ON_VERCEL (https://scholar-saathi-woad.vercel.app/)
 DATABASE STATUS:             CONNECTED_TO_MONGODB_ATLAS (Verified `scholarsaathi` cluster)
-GITHUB REPOSITORY:           CONNECTED_AND_PUSHED (https://github.com/sujith0466/ScholarSaathi.git)
-VERCEL DEPLOYMENT:           CONFIGURED_AND_READY (Root .next output directory verified)
-PUBLIC BROWSER QA:           PENDING (Awaiting public URL deployment)
+GITHUB REPOSITORY:           CONNECTED_AND_PUSHED (https://github.com/sujith0466/ScholarSaathi)
+PUBLIC BROWSER QA:           VERIFIED (Live verification passed on / and /app)
 DEMO VIDEO RECORDING:        PENDING (Planned 2-minute citizen demo + architecture walkthrough)
-HACKATHON SUBMISSION:        PENDING
-LAST VERIFIED:               2026-08-24 (Output path verification + 42/42 Vitest tests + Next.js build)
+HACKATHON SUBMISSION:        PENDING (Packaging final summary)
+LAST VERIFIED:               2026-08-24 (Live Vercel verification + 42/42 Vitest tests + Next.js build)
 ================================================================================
 ```
 
@@ -28,11 +28,13 @@ LAST VERIFIED:               2026-08-24 (Output path verification + 42/42 Vitest
 - **Hackathon:** Build What Moves India (2026)
 - **Track:** Citizen Guidance & Public Digital Services
 - **Current Date:** 2026-08-24
-- **Overall Status:** `VERCEL_OUTPUT_DIRECTORY_FIXED_READY_FOR_DEPLOYMENT`
+- **Live Production URL:** `https://scholar-saathi-woad.vercel.app/`
+- **Citizen Demo URL:** `https://scholar-saathi-woad.vercel.app/app`
+- **GitHub Remote:** `https://github.com/sujith0466/ScholarSaathi.git` (`main` branch)
+- **Overall Status:** `LIVE_IN_PRODUCTION_READY_FOR_SUBMISSION`
 - **MVP Status:** `COMPLETED`
 - **Database Status:** `CONNECTED_TO_MONGODB_ATLAS` (`scholarsaathi` cluster)
-- **GitHub Remote:** `https://github.com/sujith0466/ScholarSaathi.git` (`main` branch)
-- **Last Updated:** 2026-08-24 17:28 IST
+- **Last Updated:** 2026-08-24 17:35 IST
 - **Current Owner:** Engineering Lead (Antigravity & Codex)
 
 ---
@@ -144,31 +146,30 @@ d:/ScholarSaathi/
 | **M11-ATLAS-TEST** | Full Test Suite Execution Against MongoDB Atlas | `COMPLETED` | **42/42 tests passing** across 9 test suites (`npm test`). |
 | **M12-GIT-HYGIENE**| Secret Scanning, `.gitignore` Hardening, Machine Path Cleanup | `COMPLETED` | `.env` ignored; zero hardcoded secrets in tracked files; clean git status. |
 | **M13-GITHUB-PUSH**| Connect Remote Origin & Push `main` Branch to GitHub | `COMPLETED` | Pushed cleanly to `https://github.com/sujith0466/ScholarSaathi.git`. |
-| **M14-VERCEL-FIX** | Fix Vercel `.next` Output Directory via `distDir: '../.next'` | `COMPLETED` | `routes-manifest.json` verified generated at root `.next/routes-manifest.json`. |
-| **M15-VERCEL-DEPLOY**| Vercel Single-App Public Deployment | `PENDING` | Ready for Vercel deployment with environment configuration. |
-| **M16-PUBLIC-QA** | Public URL Browser & Mobile Verification | `PENDING` | Awaiting public URL deployment. |
-| **M17-DEMO-VIDEO**| 2-Minute Demo Video Recording (1m Citizen + 1m Architecture) | `PENDING` | Ready for video capture using live prototype. |
-| **M18-SUBMISSION**| Hackathon Final Submission Packaging (<250 word summary) | `PENDING` | Summary prepared; awaiting public URL and video link. |
+| **M14-VERCEL-DEPLOY**| Vercel Production Deployment & Build Output Resolution | `COMPLETED` | Deployed live at `https://scholar-saathi-woad.vercel.app/`. |
+| **M15-PUBLIC-QA** | Public URL Browser & API Verification | `COMPLETED` | HTTP 200 verified on `/`, `/app`, and `/api/applications/RJ202425008912`. |
+| **M16-DEMO-VIDEO**| 2-Minute Demo Video Recording (1m Citizen + 1m Architecture) | `PENDING` | Ready for video capture using live prototype. |
+| **M17-SUBMISSION**| Hackathon Final Submission Packaging (<250 word summary) | `PENDING` | Summary prepared; awaiting video link. |
 
 ---
 
-## 4. Vercel Deployment Output Fix Report
+## 4. Phase-5 Production Deployment Milestone
 
-- **Problem:** Deployment failed on Vercel with `"The file '/vercel/path0/.next/routes-manifest.json' couldn't be found."` after Next.js compilation succeeded.
-- **Root Cause:** Running `next build frontend` from the root directory wrote the build output into `frontend/.next/`, whereas Vercel's root Next.js framework runner expected the build output at the root `.next/routes-manifest.json`.
-- **Solution Implemented:** Configured `distDir: "../.next"` in `frontend/next.config.mjs` and `distDir: ".next"` in root `next.config.mjs`.
-- **Verification Evidence:** Executed `npm run build` from root; verified that `routes-manifest.json` is generated directly at `.next/routes-manifest.json` and `frontend/.next` is not created. All 7 static and dynamic pages/API routes compiled with 0 errors.
+- **PHASE-5-DEPLOY-001 (Vercel Production Deployment):** Deployed as a single unified full-stack Next.js 14 application on Vercel Edge/Serverless runtime.
+- **PHASE-5-DEPLOY-002 (MongoDB Atlas Production Database):** Connected to remote MongoDB Atlas cluster `scholarsaathi` across 5 indexed collections.
+- **PHASE-5-DEPLOY-003 (Production Environment Configuration):** Configured `MONGODB_URI`, `MONGODB_DB_NAME`, `OPENROUTER_API_KEY`, `OPENROUTER_MODEL=openrouter/free`, and `NEXT_PUBLIC_APP_URL`.
+- **PHASE-5-DEPLOY-004 (Public Production URL):** Verified live at `https://scholar-saathi-woad.vercel.app/` (Landing) and `https://scholar-saathi-woad.vercel.app/app` (Citizen App).
+- **PHASE-5-DEPLOY-005 (GitHub Synchronization):** Repository synced at `https://github.com/sujith0466/ScholarSaathi`.
 
 ---
 
 ## 5. Verification Gate Results
 
-### 1. Root .next Output Directory Verification
-```bash
-node -e "const fs = require('fs'); console.log('Root .next/routes-manifest.json exists:', fs.existsSync('.next/routes-manifest.json'));"
+### 1. Live Public Deployment HTTP Status Check
 ```
-```
-Root .next/routes-manifest.json exists: true
+GET https://scholar-saathi-woad.vercel.app/     -> HTTP 200 OK (Landing Page)
+GET https://scholar-saathi-woad.vercel.app/app  -> HTTP 200 OK (Citizen App)
+GET https://scholar-saathi-woad.vercel.app/api/applications/RJ202425008912 -> HTTP 200 OK (MongoDB Atlas)
 ```
 
 ### 2. Vitest Unit Test Suite (42/42 Tests Passed)
@@ -211,7 +212,7 @@ Route (app)                              Size     First Load JS
 
 ---
 
-## 5. Codex Contribution Summary
+## 6. Codex Contribution Summary
 
 Codex has been meaningfully involved in driving the entire architecture and implementation:
 1. **Architectural Scaffolding:** Designed modular 4-tier structure (`docs/`, `frontend/`, `tests/`, `scripts/`).
@@ -223,10 +224,11 @@ Codex has been meaningfully involved in driving the entire architecture and impl
 7. **Test Engineering:** Created 42 automated tests across 9 test suites ensuring 100% regression safety.
 8. **Atlas Migration & Release Hygiene:** Executed remote database seeding, secret scanning, and deployment configuration.
 9. **GitHub Release Integration:** Configured origin remote and completed clean upstream branch tracking on `main`.
+10. **Vercel Deployment Resolution:** Resolved `.next` output directory alignment enabling live cloud deployment.
 
 ---
 
-## 6. Change Log
+## 7. Change Log
 
 | Date | Change Summary | Owner | Rationale |
 | :--- | :--- | :--- | :--- |
@@ -234,6 +236,7 @@ Codex has been meaningfully involved in driving the entire architecture and impl
 | 2026-08-22 | Finalized Git Readiness, Security Audit & Deployment Docs | Lead | Verified `.env` ignore rules, scanned for leaked secrets, updated `README.md`, `docs/DEPLOYMENT.md`, and validated production build. |
 | 2026-08-22 | Connected and Pushed `main` to GitHub | Lead | Configured origin remote `https://github.com/sujith0466/ScholarSaathi.git`, pushed initial branch with 0 secret leaks. |
 | 2026-08-24 | Fixed Vercel `.next` Output Directory for Single-App Deployment | Lead | Configured `distDir: "../.next"` in `frontend/next.config.mjs`, verified `routes-manifest.json` outputs to root `.next/`, all 42 tests passing. |
+| 2026-08-24 | Verified Live Vercel Production Deployment | Lead | Verified HTTP 200 on live URL `https://scholar-saathi-woad.vercel.app/` and `/app`; synchronized all documentation. |
 
 ---
 *End of Live Implementation Tracker.*
