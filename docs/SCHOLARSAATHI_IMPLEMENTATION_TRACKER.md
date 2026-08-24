@@ -7,32 +7,32 @@
 CURRENT STATE BLOCK
 ================================================================================
 CURRENT PHASE:               PHASE 5 — Production Cloud Database & Deployment Readiness
-CURRENT TASK:                GitHub Push Completed & Vercel Deployment Preparation
+CURRENT TASK:                Vercel .next Build Output Directory Fix & Verification
 CURRENT OWNER:               Codex & Antigravity (Senior Engineering Lead)
-LAST COMPLETED:              GitHub Remote Connected & Pushed (`main` -> `origin/main` on https://github.com/sujith0466/ScholarSaathi.git)
-NEXT TASK:                   Vercel Public Hosting Deployment & Video Submission Packaging
-BLOCKERS:                    None (Local code, Atlas & GitHub verified; awaiting public Vercel deployment)
+LAST COMPLETED:              Configured distDir in frontend/next.config.mjs to '../.next'; Verified Root .next/routes-manifest.json Generation; 42/42 Tests Passing
+NEXT TASK:                   Trigger Vercel Redeployment & Public URL Verification
+BLOCKERS:                    None (Build output path verified matching Vercel root expectations)
 MVP COMPLETION:              100%
 GOLDEN JOURNEY COMPLETION:   100%
 DATABASE STATUS:             CONNECTED_TO_MONGODB_ATLAS (Verified `scholarsaathi` cluster)
 GITHUB REPOSITORY:           CONNECTED_AND_PUSHED (https://github.com/sujith0466/ScholarSaathi.git)
-VERCEL DEPLOYMENT:           PENDING (Ready for Vercel project deployment)
+VERCEL DEPLOYMENT:           CONFIGURED_AND_READY (Root .next output directory verified)
 PUBLIC BROWSER QA:           PENDING (Awaiting public URL deployment)
 DEMO VIDEO RECORDING:        PENDING (Planned 2-minute citizen demo + architecture walkthrough)
 HACKATHON SUBMISSION:        PENDING
-LAST VERIFIED:               2026-08-22 (Full Cloud Atlas verification + GitHub push)
+LAST VERIFIED:               2026-08-24 (Output path verification + 42/42 Vitest tests + Next.js build)
 ================================================================================
 ```
 
 - **Project Name:** ScholarSaathi (स्कॉलर साथी)
 - **Hackathon:** Build What Moves India (2026)
 - **Track:** Citizen Guidance & Public Digital Services
-- **Current Date:** 2026-08-22
-- **Overall Status:** `GITHUB_PUSHED_READY_FOR_VERCEL_DEPLOYMENT`
+- **Current Date:** 2026-08-24
+- **Overall Status:** `VERCEL_OUTPUT_DIRECTORY_FIXED_READY_FOR_DEPLOYMENT`
 - **MVP Status:** `COMPLETED`
 - **Database Status:** `CONNECTED_TO_MONGODB_ATLAS` (`scholarsaathi` cluster)
 - **GitHub Remote:** `https://github.com/sujith0466/ScholarSaathi.git` (`main` branch)
-- **Last Updated:** 2026-08-22 16:30 IST
+- **Last Updated:** 2026-08-24 17:28 IST
 - **Current Owner:** Engineering Lead (Antigravity & Codex)
 
 ---
@@ -97,7 +97,7 @@ d:/ScholarSaathi/
 │   ├── types/                            # Domain TypeScript Interfaces
 │   │   └── index.ts                      # Strict Schema Definitions
 │   ├── public/                           # Static Assets & Synthetic Docs
-│   ├── next.config.mjs                   # Next.js Local Config
+│   ├── next.config.mjs                   # Next.js Config with `distDir: '../.next'`
 │   ├── postcss.config.js                 # PostCSS Tailwind Setup
 │   ├── tailwind.config.ts                # Design System & Palette
 │   └── tsconfig.json                     # Frontend TypeScript Configuration (@/*)
@@ -144,39 +144,34 @@ d:/ScholarSaathi/
 | **M11-ATLAS-TEST** | Full Test Suite Execution Against MongoDB Atlas | `COMPLETED` | **42/42 tests passing** across 9 test suites (`npm test`). |
 | **M12-GIT-HYGIENE**| Secret Scanning, `.gitignore` Hardening, Machine Path Cleanup | `COMPLETED` | `.env` ignored; zero hardcoded secrets in tracked files; clean git status. |
 | **M13-GITHUB-PUSH**| Connect Remote Origin & Push `main` Branch to GitHub | `COMPLETED` | Pushed cleanly to `https://github.com/sujith0466/ScholarSaathi.git`. |
-| **M14-VERCEL-DEPLOY**| Vercel Single-App Public Deployment | `PENDING` | Ready for Vercel deployment with environment configuration. |
-| **M15-PUBLIC-QA** | Public URL Browser & Mobile Verification | `PENDING` | Awaiting public URL deployment. |
-| **M16-DEMO-VIDEO**| 2-Minute Demo Video Recording (1m Citizen + 1m Architecture) | `PENDING` | Ready for video capture using live prototype. |
-| **M17-SUBMISSION**| Hackathon Final Submission Packaging (<250 word summary) | `PENDING` | Summary prepared; awaiting public URL and video link. |
+| **M14-VERCEL-FIX** | Fix Vercel `.next` Output Directory via `distDir: '../.next'` | `COMPLETED` | `routes-manifest.json` verified generated at root `.next/routes-manifest.json`. |
+| **M15-VERCEL-DEPLOY**| Vercel Single-App Public Deployment | `PENDING` | Ready for Vercel deployment with environment configuration. |
+| **M16-PUBLIC-QA** | Public URL Browser & Mobile Verification | `PENDING` | Awaiting public URL deployment. |
+| **M17-DEMO-VIDEO**| 2-Minute Demo Video Recording (1m Citizen + 1m Architecture) | `PENDING` | Ready for video capture using live prototype. |
+| **M18-SUBMISSION**| Hackathon Final Submission Packaging (<250 word summary) | `PENDING` | Summary prepared; awaiting public URL and video link. |
 
 ---
 
-## 4. Verification Gate Results
+## 4. Vercel Deployment Output Fix Report
 
-### 1. GitHub Remote Tracking
+- **Problem:** Deployment failed on Vercel with `"The file '/vercel/path0/.next/routes-manifest.json' couldn't be found."` after Next.js compilation succeeded.
+- **Root Cause:** Running `next build frontend` from the root directory wrote the build output into `frontend/.next/`, whereas Vercel's root Next.js framework runner expected the build output at the root `.next/routes-manifest.json`.
+- **Solution Implemented:** Configured `distDir: "../.next"` in `frontend/next.config.mjs` and `distDir: ".next"` in root `next.config.mjs`.
+- **Verification Evidence:** Executed `npm run build` from root; verified that `routes-manifest.json` is generated directly at `.next/routes-manifest.json` and `frontend/.next` is not created. All 7 static and dynamic pages/API routes compiled with 0 errors.
+
+---
+
+## 5. Verification Gate Results
+
+### 1. Root .next Output Directory Verification
 ```bash
-git branch -vv
-```
-- Local branch `main` tracks `origin/main` (`https://github.com/sujith0466/ScholarSaathi.git`).
-
-### 2. MongoDB Atlas Strict Production Seeding
-```bash
-npm run seed:production
+node -e "const fs = require('fs'); console.log('Root .next/routes-manifest.json exists:', fs.existsSync('.next/routes-manifest.json'));"
 ```
 ```
-🌱 Starting ScholarSaathi MongoDB Seed & Indexing Process...
-✅ Connected to Real MongoDB Database: "scholarsaathi"
-📊 MongoDB Collection Record Verification:
-   - students: 2 records
-   - scholarshipApplications: 2 records
-   - applicationDocuments: 3 records
-   - applicationDefects: 1 records
-   - statusHistory: 8 records
-🎯 Priya Sharma Application Verification: Found in MongoDB (State: DEFECTIVE_INSTITUTE)
-✅ ScholarSaathi Database Seeding Completed Successfully.
+Root .next/routes-manifest.json exists: true
 ```
 
-### 3. Vitest Unit Test Suite (42/42 Tests Passed Against Atlas Cluster)
+### 2. Vitest Unit Test Suite (42/42 Tests Passed)
 ```bash
 npm test
 ```
@@ -195,10 +190,10 @@ npm test
 
  Test Files  9 passed (9)
       Tests  42 passed (42)
-   Duration  47.21s
+   Duration  68.77s
 ```
 
-### 4. Next.js 14 Production Build
+### 3. Next.js 14 Production Build
 ```bash
 npm run build
 ```
@@ -216,21 +211,6 @@ Route (app)                              Size     First Load JS
 
 ---
 
-## 5. Codex Contribution Summary
-
-Codex has been meaningfully involved in driving the entire architecture and implementation:
-1. **Architectural Scaffolding:** Designed modular 4-tier structure (`docs/`, `frontend/`, `tests/`, `scripts/`).
-2. **Domain Resolver:** Implemented deterministic `resolveJourneyState` mapping raw statuses to plain-language diagnoses, timelines, and health metrics.
-3. **MongoDB Persistence:** Built native MongoDB client provider with connection caching and Atlas `mongodb+srv://` compatibility.
-4. **Interactive Document Inspector:** Engineered side-by-side visual diff modal with deterministic seal validation.
-5. **Veritas-RAG AI Pipeline:** Built hybrid keyword/token density retriever, source classification taxonomy, and anti-hallucination gates.
-6. **Visual Motion System:** Designed 5-layer Framer Motion background with `useReducedMotion()` accessibility support.
-7. **Test Engineering:** Created 42 automated tests across 9 test suites ensuring 100% regression safety.
-8. **Atlas Migration & Release Hygiene:** Executed remote database seeding, secret scanning, and deployment configuration.
-9. **GitHub Release Integration:** Configured origin remote and completed clean upstream branch tracking on `main`.
-
----
-
 ## 6. Change Log
 
 | Date | Change Summary | Owner | Rationale |
@@ -238,6 +218,7 @@ Codex has been meaningfully involved in driving the entire architecture and impl
 | 2026-08-22 | Connected and Verified MongoDB Atlas Cluster | Lead | Configured Atlas URI in `.env`, updated dynamic client resolution in `frontend/lib/mongodb/index.ts`, seeded all 5 collections with `npm run seed:production`, verified 42/42 tests passing against Atlas. |
 | 2026-08-22 | Finalized Git Readiness, Security Audit & Deployment Docs | Lead | Verified `.env` ignore rules, scanned for leaked secrets, updated `README.md`, `docs/DEPLOYMENT.md`, and validated production build. |
 | 2026-08-22 | Connected and Pushed `main` to GitHub | Lead | Configured origin remote `https://github.com/sujith0466/ScholarSaathi.git`, pushed initial branch with 0 secret leaks. |
+| 2026-08-24 | Fixed Vercel `.next` Output Directory for Single-App Deployment | Lead | Configured `distDir: "../.next"` in `frontend/next.config.mjs`, verified `routes-manifest.json` outputs to root `.next/`, all 42 tests passing. |
 
 ---
 *End of Live Implementation Tracker.*

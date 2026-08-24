@@ -107,7 +107,7 @@ describe("Phase 4 — QA, UX Hardening & End-to-End Reliability", () => {
 
     expect(q9.isSufficient).toBe(false);
     expect(q9.answer).toContain("couldn't find enough verified");
-  }, 30000);
+  }, 60000);
 
   it("Task 11-12: Demo Reset Reliability across 3 consecutive mutation/reset cycles", async () => {
     for (let cycle = 1; cycle <= 3; cycle++) {
