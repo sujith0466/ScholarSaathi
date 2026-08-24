@@ -27,6 +27,12 @@ dist/
 .mongodb_data/
 scratch/
 
+# Demo video & large media (store externally, e.g. Google Drive)
+*.mp4
+*.mov
+*.avi
+*.mkv
+
 # Vercel
 .vercel
 

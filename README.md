@@ -12,6 +12,7 @@
 | 🚀 **Production Landing Page** | [https://scholar-saathi-woad.vercel.app/](https://scholar-saathi-woad.vercel.app/) |
 | 🎓 **Live Citizen Demo Experience** | [https://scholar-saathi-woad.vercel.app/app](https://scholar-saathi-woad.vercel.app/app) |
 | 💻 **GitHub Repository** | [https://github.com/sujith0466/ScholarSaathi](https://github.com/sujith0466/ScholarSaathi) |
+| 🎥 **Final Demo Video** | [https://drive.google.com/file/d/11qxcqH8o_uh-pEQgRMj7v-_5r1_-T0lP/view?usp=sharing](https://drive.google.com/file/d/11qxcqH8o_uh-pEQgRMj7v-_5r1_-T0lP/view?usp=sharing) |
 
 ---
 
@@ -220,14 +221,50 @@ NEXT_PUBLIC_APP_URL=https://scholar-saathi-woad.vercel.app/
 
 ## 11. Current Project Status
 
-- **Architecture & Golden Journey:** `100% COMPLETED`
-- **MongoDB Atlas Cloud Database:** `CONNECTED & VERIFIED`
-- **Automated Test Suites:** `42/42 TESTS PASSING`
-- **Production Build:** `VERIFIED (0 Errors)`
-- **Vercel Public Deployment:** `LIVE IN PRODUCTION`
+| Component | Status |
+| :--- | :---: |
+| **Architecture & Golden Journey** | ✅ `COMPLETED` |
+| **MongoDB Atlas Cloud Database** | ✅ `CONNECTED & VERIFIED` |
+| **Automated Test Suites** | ✅ `42/42 TESTS PASSING` |
+| **Production Build** | ✅ `VERIFIED (0 Errors)` |
+| **Vercel Public Deployment** | ✅ `LIVE IN PRODUCTION` |
+| **Public Browser & Mobile QA** | ✅ `COMPLETED` |
+| **Project Summary (214 words)** | ✅ `COMPLETED` |
+| **Demo Video Recording** | ✅ `COMPLETED` |
+| **Hackathon Registration** | ✅ `COMPLETED` |
+| **Final Submission Form** | ⏳ `PENDING` |
 
 ---
 
-## 12. License & Attribution
+## 12. 🎥 Final Demo Video
+
+**2-minute demonstration (citizen journey + architecture):**
+
+[https://drive.google.com/file/d/11qxcqH8o_uh-pEQgRMj7v-_5r1_-T0lP/view?usp=sharing](https://drive.google.com/file/d/11qxcqH8o_uh-pEQgRMj7v-_5r1_-T0lP/view?usp=sharing)
+
+The video covers:
+- **Minute 1 (Citizen Experience):** Priya Sharma's complete golden journey — diagnosis, document inspection, resubmission, and Veritas-RAG grounded AI assistant — on the live production deployment.
+- **Minute 2 (Architecture & Design Decisions):** Next.js App Router, MongoDB Atlas real state mutations, Veritas-RAG anti-hallucination pipeline, and hackathon implementation scope.
+
+---
+
+## 13. Codex Contribution
+
+Codex was meaningfully involved throughout the entire ScholarSaathi implementation:
+
+1. **Architectural Scaffolding:** Modular 4-tier structure (`docs/`, `frontend/`, `tests/`, `scripts/`).
+2. **Domain Resolver:** Deterministic `resolveJourneyState` mapping raw statuses to plain-language diagnoses, health scores, and timelines.
+3. **MongoDB Persistence:** Native MongoDB client provider with connection caching and Atlas `mongodb+srv://` compatibility.
+4. **Interactive Document Inspector:** Side-by-side visual diff modal with deterministic seal validation.
+5. **Veritas-RAG AI Pipeline:** Hybrid keyword/token density retriever, source classification taxonomy, and anti-hallucination sufficiency gates.
+6. **Visual Motion System:** 5-layer Framer Motion background with `useReducedMotion()` accessibility support.
+7. **Test Engineering:** 42 automated tests across 9 Vitest suites ensuring 100% regression safety.
+8. **Atlas Migration & Release Hygiene:** Remote database seeding, secret scanning, and deployment configuration.
+9. **GitHub Release Integration:** Origin remote configuration and clean upstream branch tracking on `main`.
+10. **Vercel Deployment Resolution:** Resolved `.next` output directory alignment enabling live cloud deployment.
+
+---
+
+## 14. License & Attribution
 
 Developed as an open-source prototype for the **Build What Moves India** Hackathon (2026).

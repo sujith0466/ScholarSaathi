@@ -1,4 +1,4 @@
-﻿# ScholarSaathi — Hackathon Project Summary
+# ScholarSaathi — Hackathon Project Summary
 
 ## Submission Summary
 
@@ -27,11 +27,13 @@ All student data is entirely synthetic. ScholarSaathi is an independent hackatho
 | **Live URL** | https://scholar-saathi-woad.vercel.app/ |
 | **Citizen Demo** | https://scholar-saathi-woad.vercel.app/app |
 | **GitHub** | https://github.com/sujith0466/ScholarSaathi |
+| **Demo Video** | https://drive.google.com/file/d/11qxcqH8o_uh-pEQgRMj7v-_5r1_-T0lP/view?usp=sharing |
 | **Hackathon** | Build What Moves India (2026) |
-| **Product Status** | Feature-complete, production-deployed, browser QA verified |
+| **Product Status** | Feature-complete, production-deployed, browser & mobile QA verified |
 | **AI Approach** | OpenRouter free-model routing with Veritas-RAG grounded retrieval and deterministic fallback synthesis |
 | **Data Approach** | Entirely synthetic student personas; no real citizen data used |
 | **Deployment** | Single full-stack Next.js 14 app on Vercel + MongoDB Atlas cloud persistence |
+| **Team** | Solo |
 | **Codex Contribution** | Architecture, frontend, backend API routes, MongoDB persistence, Veritas-RAG AI pipeline, automated test suite, accessibility hardening, deployment configuration, documentation |
 
 ---
