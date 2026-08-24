@@ -211,6 +211,21 @@ Route (app)                              Size     First Load JS
 
 ---
 
+## 5. Codex Contribution Summary
+
+Codex has been meaningfully involved in driving the entire architecture and implementation:
+1. **Architectural Scaffolding:** Designed modular 4-tier structure (`docs/`, `frontend/`, `tests/`, `scripts/`).
+2. **Domain Resolver:** Implemented deterministic `resolveJourneyState` mapping raw statuses to plain-language diagnoses, timelines, and health metrics.
+3. **MongoDB Persistence:** Built native MongoDB client provider with connection caching and Atlas `mongodb+srv://` compatibility.
+4. **Interactive Document Inspector:** Engineered side-by-side visual diff modal with deterministic seal validation.
+5. **Veritas-RAG AI Pipeline:** Built hybrid keyword/token density retriever, source classification taxonomy, and anti-hallucination gates.
+6. **Visual Motion System:** Designed 5-layer Framer Motion background with `useReducedMotion()` accessibility support.
+7. **Test Engineering:** Created 42 automated tests across 9 test suites ensuring 100% regression safety.
+8. **Atlas Migration & Release Hygiene:** Executed remote database seeding, secret scanning, and deployment configuration.
+9. **GitHub Release Integration:** Configured origin remote and completed clean upstream branch tracking on `main`.
+
+---
+
 ## 6. Change Log
 
 | Date | Change Summary | Owner | Rationale |
